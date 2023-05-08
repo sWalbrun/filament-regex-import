@@ -35,7 +35,6 @@ class TestCase extends Orchestra
             FilamentServiceProvider::class,
             BladeIconsServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
-            SupportServiceProvider::class,
             FormsServiceProvider::class,
             FilamentModelImportServiceProvider::class,
             BladeCaptureDirectiveServiceProvider::class,
