@@ -1,25 +1,26 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "swalbrun/filament-model-import",
+    "description": "This is my package filament-model-import",
     "keywords": [
-        ":vendor_name",
+        "sWalbrun",
         "laravel",
-        ":package_slug"
+        "filament-model-import"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/swalbrun/filament-model-import",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Sebastian Walbrun",
+            "email": "sebastian@walbrun-consulting.de",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0",
         "filament/filament": "^2.0",
-        "spatie/laravel-package-tools": "^1.13.5",
-        "illuminate/contracts": "^9.0|^10.0"
+        "illuminate/contracts": "^9.0|^10.0",
+        "maatwebsite/excel": "^3.1",
+        "spatie/laravel-package-tools": "^1.13.5"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -34,17 +35,19 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5",
+        "spatie/laravel-permission": "^5.10",
         "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "SWalbrun\\FilamentModelImport\\": "src",
+            "SWalbrun\\FilamentModelImport\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "SWalbrun\\FilamentModelImport\\Tests\\": "tests",
+            "SWalbrun\\FilamentModelImport\\Tests\\__Data__\\": "tests/__data__/"
         }
     },
     "scripts": {
@@ -67,10 +70,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "SWalbrun\\FilamentModelImport\\FilamentModelImportServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentModelImport": "SWalbrun\\FilamentModelImport\\Facades\\FilamentModelImport"
             }
         }
     },
