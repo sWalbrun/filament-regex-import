@@ -6,6 +6,10 @@ use Illuminate\Filesystem\Filesystem;
 /** @var Filesystem $fileSystem */
 $fileSystem = app(Filesystem::class);
 
+beforeEach(function () use ($fileSystem) {
+    $fileSystem->delete(base_path('app/Import/ModelMapping/UserMapper.php'));
+});
+
 afterEach(function () use ($fileSystem) {
     $fileSystem->delete(base_path('app/Import/ModelMapping/UserMapper.php'));
 });
