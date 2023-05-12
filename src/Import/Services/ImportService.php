@@ -11,9 +11,9 @@ use Maatwebsite\Excel\Row;
 use ReflectionFunction;
 use ReflectionParameter;
 use SWalbrun\FilamentModelImport\Import\ColumnMapping;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegister;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegister;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegistrar;
 
 /**
  * This processor is trying to create models using the {@link IdentificationOf::propertyMapping()} taking care of
@@ -22,9 +22,9 @@ use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegister;
  */
 class ImportService implements OnEachRow
 {
-    private IdentificationRegister $identificationRegister;
+    private IdentificationRegistrar $identificationRegister;
 
-    private AssociationRegister $associationRegister;
+    private AssociationRegistrar $associationRegister;
 
     private bool $firstRow = true;
 
@@ -35,7 +35,7 @@ class ImportService implements OnEachRow
      */
     private Collection $headingToColumnMapping;
 
-    public function __construct(IdentificationRegister $identificationRegister, AssociationRegister $associationRegister)
+    public function __construct(IdentificationRegistrar $identificationRegister, AssociationRegistrar $associationRegister)
     {
         $this->identificationRegister = $identificationRegister;
         $this->associationRegister = $associationRegister;

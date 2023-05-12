@@ -34,6 +34,8 @@ class ImportPage extends Page
         return [
             FileUpload::make(self::IMPORT)
                 ->label(trans('Import'))
+                ->acceptedFileTypes(config('filament-model-import.accepted_mimes'))
+                ->imagePreviewHeight('250')
                 ->afterStateUpdated(
                     function () {
                         $files = collect($this->import);

@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use function Pest\Livewire\livewire;
 use SWalbrun\FilamentModelImport\Filament\Pages\ImportPage;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegister;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegister;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegistrar;
 use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfBlog;
 use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfPost;
 use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfRole;
@@ -194,16 +194,16 @@ function mockBlog(): Blog
 
 function registerIdentification(IdentificationOf $identificationOfUser)
 {
-    /** @var IdentificationRegister $identificationRegister */
-    $identificationRegister = resolve(IdentificationRegister::class);
+    /** @var IdentificationRegistrar $identificationRegister */
+    $identificationRegister = resolve(IdentificationRegistrar::class);
     $identificationRegister
         ->register($identificationOfUser);
 }
 
 function registerAssociationOf(AssociationOf|Closure $associationOf)
 {
-    /** @var AssociationRegister $associationRegister */
-    $associationRegister = resolve(AssociationRegister::class);
+    /** @var AssociationRegistrar $associationRegister */
+    $associationRegister = resolve(AssociationRegistrar::class);
     if ($associationOf instanceof AssociationOf) {
         $associationRegister->registerAssociationOf($associationOf);
     } else {

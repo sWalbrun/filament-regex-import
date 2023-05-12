@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
  * and the corresponding {@link IdentificationOf::propertyMapping()} is working properly.
  * </p>
  */
-class AssociationRegister
+class AssociationRegistrar
 {
     private Collection $closures;
 

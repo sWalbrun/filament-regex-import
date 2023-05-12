@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 /**
  * Use this register to register your {@link IdentificationOf} (one mapping per model).
  */
-class IdentificationRegister
+class IdentificationRegistrar
 {
     private Collection $mappings;
 
