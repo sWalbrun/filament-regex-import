@@ -26,7 +26,7 @@ it('can create an user and roles by import', function () {
     registerAssociationOf($identificationOfUser);
     livewire(ImportPage::class)
         ->fillForm([
-            ImportPage::IMPORT => [uuid_create() => $fileToImport],
+            ImportPage::IMPORT => [uniqid() => $fileToImport],
         ]);
 
     /** @var User $importedUser */
