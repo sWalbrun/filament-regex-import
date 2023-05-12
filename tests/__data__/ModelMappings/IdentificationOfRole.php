@@ -16,7 +16,7 @@ class IdentificationOfRole extends IdentificationOf
     public function uniqueColumns(): array
     {
         return [
-            'name'
+            'name',
         ];
     }
 

@@ -45,7 +45,7 @@ class ImportPage extends Page
                             array_pop($this->import)->getRealPath()
                         );
                     }
-                )
+                ),
         ];
     }
 }

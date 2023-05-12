@@ -18,7 +18,7 @@ class IdentificationRegister
 
     public function register(IdentificationOf $mapping): self
     {
-        if (!$this->mappings->contains(fn (IdentificationOf $existingMapping) => $existingMapping === $mapping)) {
+        if (! $this->mappings->contains(fn (IdentificationOf $existingMapping) => $existingMapping === $mapping)) {
             $this->mappings->push($mapping);
         }
 

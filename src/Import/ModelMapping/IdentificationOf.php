@@ -14,7 +14,7 @@ abstract class IdentificationOf
     public Model $model;
 
     /**
-     * @param Model $model This mapping is referring to this model.
+     * @param  Model  $model This mapping is referring to this model.
      */
     public function __construct(Model $model)
     {
@@ -32,17 +32,11 @@ abstract class IdentificationOf
 
     /**
      * In case the model is having unique columns (combined), those get used for fetching existing models.
-     *
-     * @return array
      */
     abstract public function uniqueColumns(): array;
 
     /**
      * You can overwrite this hook in case you want to make some manipulations before the model gets saved.
-     *
-     * @param Model $model
-     *
-     * @return void
      */
     public function saving(Model $model): void
     {
@@ -50,10 +44,6 @@ abstract class IdentificationOf
 
     /**
      * You can overwrite this hook in case you want to make some manipulations before the model gets saved.
-     *
-     * @param Model $model
-     *
-     * @return void
      */
     public function saved(Model $model): void
     {

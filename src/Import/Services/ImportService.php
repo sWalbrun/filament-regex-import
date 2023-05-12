@@ -2,10 +2,6 @@
 
 namespace SWalbrun\FilamentModelImport\Import\Services;
 
-use SWalbrun\FilamentModelImport\Import\ColumnMapping;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegister;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegister;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +10,10 @@ use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Row;
 use ReflectionFunction;
 use ReflectionParameter;
+use SWalbrun\FilamentModelImport\Import\ColumnMapping;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegister;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegister;
 
 /**
  * This processor is trying to create models using the {@link IdentificationOf::propertyMapping()} taking care of
@@ -44,8 +44,6 @@ class ImportService implements OnEachRow
     }
 
     /**
-     * @param Row $row
-     *
      * @return void
      *
      * @throws Exception
@@ -63,16 +61,12 @@ class ImportService implements OnEachRow
     }
 
     /**
-     * @param Collection $row
-     *
-     * @return void
-     *
      * @throws Exception
      */
     private function determineHeader(Collection $row): void
     {
         $row->each(function (?string $cell, int $index) {
-            if (!isset($cell)) {
+            if (! isset($cell)) {
                 // Since the cell is not having a heading row, we cannot process it since it gets used as regEx subject
                 return;
             }
@@ -104,7 +98,7 @@ class ImportService implements OnEachRow
                         new ColumnMapping($mapping, $matchingColumns->keys()->first(), $matchingColumns->first())
                     );
                 });
-            if (!$this->headingToColumnMapping->has($index)) {
+            if (! $this->headingToColumnMapping->has($index)) {
                 $this->nonMatchingHeadingCells->push($cell);
             }
         });
@@ -131,10 +125,9 @@ class ImportService implements OnEachRow
     private function setAttributes(Collection $row): void
     {
         $row->each(function (?string $cell, int $index) {
-            // phpcs:ignore
-            /** @var ColumnMapping $columnValue */
+            /** @var ColumnMapping|null $columnValue */
             $columnValue = $this->headingToColumnMapping->get($index);
-            if (!isset($columnValue)) {
+            if (! isset($columnValue)) {
                 // This column has not been recognized. We can just skip it.
                 return;
             }
@@ -154,12 +147,15 @@ class ImportService implements OnEachRow
                 // We have to remember the position within the method declaration to make sure the closure
                 // always get called correctly
                 $requiredTypes = collect($reflectionMethod->getParameters())
-                    ->mapWithKeys(fn (ReflectionParameter $parameter) => [$parameter->getPosition() => $parameter->getType()->getName()]);
+                    ->mapWithKeys(fn (ReflectionParameter $parameter) => [
+                        // @phpstan-ignore-next-line
+                        $parameter->getPosition() => $parameter->getType()->getName(),
+                    ]);
 
                 $requiredModels = $allModels
                     ->mapWithKeys(
                         fn (Model $importedModel) => [
-                            $requiredTypes->search(fn (string $requiredType) => $importedModel instanceof $requiredType) => $importedModel
+                            $requiredTypes->search(fn (string $requiredType) => $importedModel instanceof $requiredType) => $importedModel,
                         ]
                     );
                 if ($requiredTypes->count() !== $requiredModels->count()) {
@@ -176,7 +172,7 @@ class ImportService implements OnEachRow
         $this->headingToColumnMapping
             ->unique(fn (ColumnMapping $columnValue) => $columnValue->identificationOf)
             ->each(function (ColumnMapping $columnMapping) {
-                if (count($columnMapping->identificationOf->uniqueColumns()) >= 0) {
+                if (count($columnMapping->identificationOf->uniqueColumns()) > 0) {
                     $model = $columnMapping->identificationOf->model;
                     $uniqueColumns = collect($model->getAttributes())->filter(
                         fn ($value, string $column) => in_array($column, $columnMapping->identificationOf->uniqueColumns())
@@ -198,9 +194,6 @@ class ImportService implements OnEachRow
     }
 
     /**
-     * @param string $implode
-     * @param string $cell
-     *
      * @return mixed
      *
      * @throws Exception
@@ -209,8 +202,8 @@ class ImportService implements OnEachRow
     {
         throw new Exception(
             'The regex\'s result is overlapping. More than one matching regex ('
-            . $implode
-            . ") has been found for column ($cell)"
+            .$implode
+            .") has been found for column ($cell)"
         );
     }
 }

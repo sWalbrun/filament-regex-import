@@ -3,7 +3,6 @@
 namespace SWalbrun\FilamentModelImport\Import\ModelMapping;
 
 use Closure;
-use hanneskod\classtools\Transformer\Reader;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -37,10 +36,6 @@ class AssociationRegister
      * <code>
      * registerClosure(fn (self $modelA, Foo $foo) => $modelA->associate($foo)->save())
      * </code>
-     *
-     * @param Closure $closure
-     *
-     * @return self
      */
     public function registerClosure(Closure $closure): self
     {

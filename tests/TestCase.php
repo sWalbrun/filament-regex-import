@@ -7,7 +7,6 @@ use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
-use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
@@ -24,7 +23,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'SWalbrun\\FilamentModelImport\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'SWalbrun\\FilamentModelImport\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
@@ -47,7 +46,7 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/__data__/Migrations/');
+        $this->loadMigrationsFrom(__DIR__.'/__data__/Migrations/');
     }
 
     public function getEnvironmentSetUp($app)

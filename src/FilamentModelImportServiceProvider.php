@@ -17,11 +17,11 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
     ];
 
     protected array $styles = [
-        'plugin-filament-model-import' => __DIR__ . '/../resources/dist/filament-model-import.css',
+        'plugin-filament-model-import' => __DIR__.'/../resources/dist/filament-model-import.css',
     ];
 
     protected array $scripts = [
-        'plugin-filament-model-import' => __DIR__ . '/../resources/dist/filament-model-import.js',
+        'plugin-filament-model-import' => __DIR__.'/../resources/dist/filament-model-import.js',
     ];
 
     public function configurePackage(Package $package): void

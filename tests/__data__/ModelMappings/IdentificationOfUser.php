@@ -18,7 +18,7 @@ class IdentificationOfUser extends IdentificationOf implements AssociationOf
     public function uniqueColumns(): array
     {
         return [
-            User::COL_EMAIL
+            User::COL_EMAIL,
         ];
     }
 

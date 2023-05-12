@@ -2,8 +2,8 @@
 
 namespace SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings;
 
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
 use Illuminate\Support\Collection;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
 
 class IdentificationOfPost extends IdentificationOf
 {
@@ -13,7 +13,7 @@ class IdentificationOfPost extends IdentificationOf
     {
         return collect(
             [
-                'postName' => '/PostName/i'
+                'postName' => '/PostName/i',
             ]
         );
     }
