@@ -51,7 +51,7 @@ it('can update an user by import', function () {
     $fileToImport = getDefaultXlsx('UserImport.xlsx');
     livewire(ImportPage::class)
         ->fillForm([
-            ImportPage::IMPORT => [uuid_create() => $fileToImport],
+            ImportPage::IMPORT => [uniqid() => $fileToImport],
         ])->assertSuccessful();
 
     /** @var User $importedUser */
@@ -74,7 +74,7 @@ it('does not call the relation hook if the method argument types do not match', 
     $fileToImport = getDefaultXlsx('PropertyImport.xlsx');
     livewire(ImportPage::class)
         ->fillForm([
-            ImportPage::IMPORT => [uuid_create() => $fileToImport],
+            ImportPage::IMPORT => [uniqid() => $fileToImport],
         ]);
     expect(IdentificationOfPost::$hasHookBeenCalled)->toBeFalsy();
 });
@@ -91,7 +91,7 @@ it('does call the relation hook if the method argument types match', function ()
     $fileToImport = getDefaultXlsx('PropertyImport.xlsx');
     livewire(ImportPage::class)
         ->fillForm([
-            ImportPage::IMPORT => [uuid_create() => $fileToImport],
+            ImportPage::IMPORT => [uniqid() => $fileToImport],
         ]);
     expect(IdentificationOfPost::$hasHookBeenCalled)->toBeTruthy();
 });
@@ -104,7 +104,7 @@ it('throws an exception for', function (IdentificationOf $modelMapping) {
     $fileToImport = getDefaultXlsx('UserImport.xlsx');
     expect(fn () => livewire(ImportPage::class)
         ->fillForm([
-            ImportPage::IMPORT => [uuid_create() => $fileToImport],
+            ImportPage::IMPORT => [uniqid() => $fileToImport],
         ])->send())->toThrow(Exception::class, "The regex's result is overlapping");
 })->with([
     'regex matching between two models' => fn () => new class extends IdentificationOf
