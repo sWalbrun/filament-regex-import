@@ -16,11 +16,11 @@ use Illuminate\Support\Collection;
  * has not been called, at least one model could not been identified beforehand.</i>
  * </p>
  * <p>
- * Therefore, make sure your {@link IdentificationOf identifications}
- * and the corresponding {@link IdentificationOf::propertyMapping()} is working properly.
+ * Therefore, make sure your {@link BaseMapper identifications}
+ * and the corresponding {@link BaseMapper::propertyMapping()} is working properly.
  * </p>
  */
-class AssociationRegistrar
+class RelationRegistrar
 {
     private Collection $closures;
 
@@ -44,15 +44,15 @@ class AssociationRegistrar
         return $this;
     }
 
-    public function registerAssociationOf(AssociationOf $associationOf): self
+    public function registerRelator(Relator $relator): self
     {
-        $this->closures = $this->closures->merge($associationOf->associationOfClosures());
+        $this->closures = $this->closures->merge($relator->relatingClosures());
 
         return $this;
     }
 
     /**
-     * @return Collection<IdentificationOf>
+     * @return Collection<BaseMapper>
      */
     public function getClosures(): Collection
     {

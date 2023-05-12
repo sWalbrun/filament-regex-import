@@ -2,24 +2,18 @@
 
 namespace SWalbrun\FilamentModelImport\Import;
 
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
 
 /**
- * A simple data class for scoping {@link IdentificationOf} with {@link ColumnMapping::$column model columns} of
- * {@link IdentificationOf::$model}.
+ * A simple data class for scoping {@link BaseMapper} with {@link ColumnMapping::$column model columns} of
+ * {@link BaseMapper::$model}.
  */
 class ColumnMapping
 {
-    public IdentificationOf $identificationOf;
-
-    public string $column;
-
-    public string $originalRegEx;
-
-    public function __construct(IdentificationOf $identificationOf, string $column, string $originalRegEx)
-    {
-        $this->identificationOf = $identificationOf;
-        $this->column = $column;
-        $this->originalRegEx = $originalRegEx;
+    public function __construct(
+        public BaseMapper $mapper,
+        public string $column,
+        public string $originalRegEx
+    ) {
     }
 }

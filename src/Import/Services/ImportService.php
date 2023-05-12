@@ -11,20 +11,20 @@ use Maatwebsite\Excel\Row;
 use ReflectionFunction;
 use ReflectionParameter;
 use SWalbrun\FilamentModelImport\Import\ColumnMapping;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegistrar;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
 
 /**
- * This processor is trying to create models using the {@link IdentificationOf::propertyMapping()} taking care of
- * {@link IdentificationOf::uniqueColumns() unique columns} making sure the import can be idempotent.<br>
- * Associations get also set in case {@link IdentificationOf::associationHooks() hooks} are set.
+ * This processor is trying to create models using the {@link BaseMapper::propertyMapping()} taking care of
+ * {@link BaseMapper::uniqueColumns() unique columns} making sure the import can be idempotent.<br>
+ * Associations get also set in case {@link BaseMapper::associationHooks() hooks} are set.
  */
 class ImportService implements OnEachRow
 {
-    private IdentificationRegistrar $identificationRegister;
+    private MappingRegistrar $identificationRegister;
 
-    private AssociationRegistrar $associationRegister;
+    private RelationRegistrar $associationRegister;
 
     private bool $firstRow = true;
 
@@ -35,7 +35,7 @@ class ImportService implements OnEachRow
      */
     private Collection $headingToColumnMapping;
 
-    public function __construct(IdentificationRegistrar $identificationRegister, AssociationRegistrar $associationRegister)
+    public function __construct(MappingRegistrar $identificationRegister, RelationRegistrar $associationRegister)
     {
         $this->identificationRegister = $identificationRegister;
         $this->associationRegister = $associationRegister;
@@ -72,7 +72,7 @@ class ImportService implements OnEachRow
             }
             $this->identificationRegister
                 ->getMappings()
-                ->each(function (IdentificationOf $mapping) use ($index, $cell) {
+                ->each(function (BaseMapper $mapping) use ($index, $cell) {
                     $matchingColumns = $mapping->propertyMapping()
                         ->filter(fn (string $regEx, string $column) => preg_match($regEx, $cell) || $column === $cell);
                     if ($matchingColumns->count() > 1) {
@@ -118,7 +118,7 @@ class ImportService implements OnEachRow
             ->each(
                 fn (
                     ColumnMapping $columnValue
-                ) => $columnValue->identificationOf->model = $columnValue->identificationOf->model->newInstance()
+                ) => $columnValue->mapper->model = $columnValue->mapper->model->newInstance()
             );
     }
 
@@ -132,14 +132,14 @@ class ImportService implements OnEachRow
                 return;
             }
 
-            $columnValue->identificationOf->model->{$columnValue->column} = $cell;
+            $columnValue->mapper->model->{$columnValue->column} = $cell;
         });
     }
 
     private function setRelations()
     {
         $allModels = $this->headingToColumnMapping
-            ->map(fn (ColumnMapping $columnValue) => $columnValue->identificationOf->model)
+            ->map(fn (ColumnMapping $columnValue) => $columnValue->mapper->model)
             ->unique();
         $this->associationRegister->getClosures()
             ->map(function (Closure $callback) use ($allModels) {
@@ -170,26 +170,26 @@ class ImportService implements OnEachRow
     private function persistAllModels(): void
     {
         $this->headingToColumnMapping
-            ->unique(fn (ColumnMapping $columnValue) => $columnValue->identificationOf)
+            ->unique(fn (ColumnMapping $columnValue) => $columnValue->mapper)
             ->each(function (ColumnMapping $columnMapping) {
-                if (count($columnMapping->identificationOf->uniqueColumns()) > 0) {
-                    $model = $columnMapping->identificationOf->model;
+                if (count($columnMapping->mapper->uniqueColumns()) > 0) {
+                    $model = $columnMapping->mapper->model;
                     $uniqueColumns = collect($model->getAttributes())->filter(
-                        fn ($value, string $column) => in_array($column, $columnMapping->identificationOf->uniqueColumns())
+                        fn ($value, string $column) => in_array($column, $columnMapping->mapper->uniqueColumns())
                     );
 
                     $builder = $model->newQuery();
                     $uniqueColumns->each(fn ($value, string $column) => $builder->where($column, '=', $value));
                     $modelToPersist = $builder->firstOrNew();
                     $modelToPersist->fill($model->getAttributes());
-                    $columnMapping->identificationOf->saving($modelToPersist);
+                    $columnMapping->mapper->saving($modelToPersist);
                     $modelToPersist->save();
-                    $columnMapping->identificationOf->saved($modelToPersist);
-                    $columnMapping->identificationOf->model = $modelToPersist;
+                    $columnMapping->mapper->saved($modelToPersist);
+                    $columnMapping->mapper->model = $modelToPersist;
 
                     return;
                 }
-                $columnMapping->identificationOf->model->save();
+                $columnMapping->mapper->model->save();
             });
     }
 

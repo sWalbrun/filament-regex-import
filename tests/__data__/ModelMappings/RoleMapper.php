@@ -4,9 +4,9 @@ namespace SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings;
 
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
 
-class IdentificationOfRole extends IdentificationOf
+class RoleMapper extends BaseMapper
 {
     public function __construct()
     {

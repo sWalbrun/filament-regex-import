@@ -3,9 +3,9 @@
 namespace SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings;
 
 use Illuminate\Support\Collection;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
 
-class IdentificationOfPost extends IdentificationOf
+class PostMapper extends BaseMapper
 {
     public static bool $hasHookBeenCalled = false;
 

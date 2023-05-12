@@ -3,9 +3,9 @@
 namespace SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings;
 
 use Illuminate\Support\Collection;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
 
-class IdentificationOfBlog extends IdentificationOf
+class BlogMapper extends BaseMapper
 {
     public function propertyMapping(): Collection
     {

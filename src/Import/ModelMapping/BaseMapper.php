@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
  * You have to extend this mapping to make it possible to import a {@link __construct() model} via the import.
  * Furthermore, make sure your {@link Model::$fillable model's attributes are fillable}.
  */
-abstract class IdentificationOf
+abstract class BaseMapper
 {
     public Model $model;
 

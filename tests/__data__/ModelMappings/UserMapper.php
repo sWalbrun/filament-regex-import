@@ -4,11 +4,11 @@ namespace SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings;
 
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\User;
 
-class IdentificationOfUser extends IdentificationOf implements AssociationOf
+class UserMapper extends BaseMapper implements Relator
 {
     public function __construct()
     {
@@ -34,7 +34,7 @@ class IdentificationOfUser extends IdentificationOf implements AssociationOf
         ]);
     }
 
-    public function associationOfClosures(): Collection
+    public function relatingClosures(): Collection
     {
         return collect([
             fn (User $user, Role $role) => $user->roles()->saveMany([$role]),

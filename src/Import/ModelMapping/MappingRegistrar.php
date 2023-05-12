@@ -5,9 +5,9 @@ namespace SWalbrun\FilamentModelImport\Import\ModelMapping;
 use Illuminate\Support\Collection;
 
 /**
- * Use this register to register your {@link IdentificationOf} (one mapping per model).
+ * Use this register to register your {@link BaseMapper} (one mapping per model).
  */
-class IdentificationRegistrar
+class MappingRegistrar
 {
     private Collection $mappings;
 
@@ -16,9 +16,9 @@ class IdentificationRegistrar
         $this->mappings = $mappings;
     }
 
-    public function register(IdentificationOf $mapping): self
+    public function register(BaseMapper $mapping): self
     {
-        if (! $this->mappings->contains(fn (IdentificationOf $existingMapping) => $existingMapping === $mapping)) {
+        if (! $this->mappings->contains(fn (BaseMapper $existingMapping) => $existingMapping === $mapping)) {
             $this->mappings->push($mapping);
         }
 
@@ -26,7 +26,7 @@ class IdentificationRegistrar
     }
 
     /**
-     * @return Collection<IdentificationOf>
+     * @return Collection<BaseMapper>
      */
     public function getMappings(): Collection
     {

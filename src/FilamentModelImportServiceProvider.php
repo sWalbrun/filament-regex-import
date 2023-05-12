@@ -6,11 +6,12 @@ use Exception;
 use Filament\PluginServiceProvider;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
+use SWalbrun\FilamentModelImport\Commands\MakeImportMapper;
 use SWalbrun\FilamentModelImport\Filament\Pages\ImportPage;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegistrar;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
 
 class FilamentModelImportServiceProvider extends PluginServiceProvider
 {
@@ -32,14 +33,15 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
     {
         $package->name(static::$name)
             ->hasConfigFile()
+            ->hasCommand(MakeImportMapper::class)
             ->hasViews();
     }
 
     public function boot()
     {
         parent::boot();
-        $this->app->singleton(IdentificationRegistrar::class);
-        $this->app->singleton(AssociationRegistrar::class);
+        $this->app->singleton(MappingRegistrar::class);
+        $this->app->singleton(RelationRegistrar::class);
     }
 
     /**
@@ -50,30 +52,30 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
     {
         parent::register();
 
-        /** @var IdentificationRegistrar $identificationRegistrar */
-        $identificationRegistrar = resolve(IdentificationRegistrar::class);
+        /** @var MappingRegistrar $identificationRegistrar */
+        $identificationRegistrar = resolve(MappingRegistrar::class);
 
-        /** @var AssociationRegistrar $associationRegistrar */
-        $associationRegistrar = resolve(AssociationRegistrar::class);
+        /** @var RelationRegistrar $associationRegistrar */
+        $associationRegistrar = resolve(RelationRegistrar::class);
         $configIdentifier = static::$name.'.mappers';
         $mappers = collect(config($configIdentifier));
         $mappers->each(function ($class) use ($configIdentifier) {
-            if (! (is_subclass_of($class, IdentificationOf::class) || is_subclass_of($class, AssociationOf::class))) {
+            if (! (is_subclass_of($class, BaseMapper::class) || is_subclass_of($class, Relator::class))) {
                 throw new Exception(
                     'The configured mapper class '.
                     "$class in $configIdentifier does not implement "
-                    .IdentificationOf::class
+                    .BaseMapper::class
                     .' nor '
-                    .AssociationOf::class
+                    .Relator::class
                 );
             }
         })->each(function (string $mapperClass) use ($associationRegistrar, $identificationRegistrar) {
             $mapper = resolve($mapperClass);
-            if ($mapper instanceof IdentificationOf) {
+            if ($mapper instanceof BaseMapper) {
                 $identificationRegistrar->register($mapper);
             }
-            if ($mapper instanceof AssociationOf) {
-                $associationRegistrar->registerAssociationOf($mapper);
+            if ($mapper instanceof Relator) {
+                $associationRegistrar->registerRelator($mapper);
             }
         });
 

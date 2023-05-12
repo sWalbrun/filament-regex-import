@@ -6,24 +6,24 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use function Pest\Livewire\livewire;
 use SWalbrun\FilamentModelImport\Filament\Pages\ImportPage;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\AssociationRegistrar;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationOf;
-use SWalbrun\FilamentModelImport\Import\ModelMapping\IdentificationRegistrar;
-use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfBlog;
-use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfPost;
-use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfRole;
-use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\IdentificationOfUser;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
+use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
+use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\BlogMapper;
+use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\PostMapper;
+use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\RoleMapper;
+use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\UserMapper;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\Blog;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\Post;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\User;
 
 it('can create an user and roles by import', function () {
     $fileToImport = getDefaultXlsx('UserImport.xlsx');
-    $identificationOfUser = new IdentificationOfUser();
-    registerIdentification($identificationOfUser);
-    registerIdentification(new IdentificationOfRole());
-    registerAssociationOf($identificationOfUser);
+    $userMapper = new UserMapper();
+    registerMapper($userMapper);
+    registerMapper(new RoleMapper());
+    registerRelator($userMapper);
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
@@ -43,10 +43,10 @@ it('can update an user by import', function () {
         'email' => 'ws-1993@gmx.de',
     ]);
 
-    $identificationOfUser = new IdentificationOfUser();
-    registerIdentification($identificationOfUser);
-    registerIdentification(new IdentificationOfRole());
-    registerAssociationOf($identificationOfUser);
+    $userMapper = new UserMapper();
+    registerMapper($userMapper);
+    registerMapper(new RoleMapper());
+    registerRelator($userMapper);
 
     $fileToImport = getDefaultXlsx('UserImport.xlsx');
     livewire(ImportPage::class)
@@ -65,41 +65,41 @@ it('does not call the relation hook if the method argument types do not match', 
     $blog = mockBlog();
     $post = mockPost();
 
-    IdentificationOfPost::$hasHookBeenCalled = false;
+    PostMapper::$hasHookBeenCalled = false;
 
-    registerIdentification(new IdentificationOfBlog($blog));
-    registerIdentification(new IdentificationOfPost($post));
-    registerAssociationOf(fn (stdClass $post, IdentificationOfBlog $blog) => IdentificationOfPost::$hasHookBeenCalled = true);
+    registerMapper(new BlogMapper($blog));
+    registerMapper(new PostMapper($post));
+    registerRelator(fn (stdClass $post, BlogMapper $blog) => PostMapper::$hasHookBeenCalled = true);
 
     $fileToImport = getDefaultXlsx('PropertyImport.xlsx');
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
         ]);
-    expect(IdentificationOfPost::$hasHookBeenCalled)->toBeFalsy();
+    expect(PostMapper::$hasHookBeenCalled)->toBeFalsy();
 });
 
 it('does call the relation hook if the method argument types match', function () {
     $blog = mockBlog();
     $post = mockPost();
-    IdentificationOfPost::$hasHookBeenCalled = false;
+    PostMapper::$hasHookBeenCalled = false;
 
-    registerIdentification(new IdentificationOfBlog($blog));
-    registerIdentification(new IdentificationOfPost($post));
-    registerAssociationOf(fn (Post $post, Blog $blog) => IdentificationOfPost::$hasHookBeenCalled = true);
+    registerMapper(new BlogMapper($blog));
+    registerMapper(new PostMapper($post));
+    registerRelator(fn (Post $post, Blog $blog) => PostMapper::$hasHookBeenCalled = true);
 
     $fileToImport = getDefaultXlsx('PropertyImport.xlsx');
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
         ]);
-    expect(IdentificationOfPost::$hasHookBeenCalled)->toBeTruthy();
+    expect(PostMapper::$hasHookBeenCalled)->toBeTruthy();
 });
 
-it('throws an exception for', function (IdentificationOf $modelMapping) {
-    registerIdentification(new IdentificationOfUser());
-    registerIdentification(new IdentificationOfRole());
-    registerIdentification($modelMapping);
+it('throws an exception for', function (BaseMapper $modelMapping) {
+    registerMapper(new UserMapper());
+    registerMapper(new RoleMapper());
+    registerMapper($modelMapping);
 
     $fileToImport = getDefaultXlsx('UserImport.xlsx');
     expect(fn () => livewire(ImportPage::class)
@@ -107,7 +107,7 @@ it('throws an exception for', function (IdentificationOf $modelMapping) {
             ImportPage::IMPORT => [uniqid() => $fileToImport],
         ])->send())->toThrow(Exception::class, "The regex's result is overlapping");
 })->with([
-    'regex matching between two models' => fn () => new class extends IdentificationOf
+    'regex matching between two models' => fn () => new class extends BaseMapper
     {
         public function __construct()
         {
@@ -126,7 +126,7 @@ it('throws an exception for', function (IdentificationOf $modelMapping) {
             return [];
         }
     },
-    'regex matching within same model' => fn () => new class extends IdentificationOf
+    'regex matching within same model' => fn () => new class extends BaseMapper
     {
         public function __construct()
         {
@@ -192,23 +192,23 @@ function mockBlog(): Blog
     return $blogMock;
 }
 
-function registerIdentification(IdentificationOf $identificationOfUser)
+function registerMapper(BaseMapper $mapper): void
 {
-    /** @var IdentificationRegistrar $identificationRegister */
-    $identificationRegister = resolve(IdentificationRegistrar::class);
+    /** @var MappingRegistrar $identificationRegister */
+    $identificationRegister = resolve(MappingRegistrar::class);
     $identificationRegister
-        ->register($identificationOfUser);
+        ->register($mapper);
 }
 
-function registerAssociationOf(AssociationOf|Closure $associationOf)
+function registerRelator(Relator|Closure $relator): void
 {
-    /** @var AssociationRegistrar $associationRegister */
-    $associationRegister = resolve(AssociationRegistrar::class);
-    if ($associationOf instanceof AssociationOf) {
-        $associationRegister->registerAssociationOf($associationOf);
+    /** @var RelationRegistrar $associationRegister */
+    $associationRegister = resolve(RelationRegistrar::class);
+    if ($relator instanceof Relator) {
+        $associationRegister->registerRelator($relator);
     } else {
         $associationRegister->registerClosure(
-            $associationOf
+            $relator
         );
     }
 }

@@ -6,12 +6,74 @@
 
 This Filament Plugin will enable you to import files to upsert models by matching columns via regex.
 
+## Features
+
+### Matching header columns with configured regex
+
+Matches given mappers' regex with model columns
+
+| Username  | EMail                           |
+|-----------|---------------------------------|
+| Sebastian | sebastian@walbrun-consulting.de |
+| John      | john@doe.test                   |
+
+```php
+ public function propertyMapping(): Collection
+    {
+        return collect([
+            'name' => '/(user|first|last)?name)/i',
+            'email' => '/(E(-|_)?)?Mail/i',
+        ]);
+    }
+```
+
+### Detecting overlapping regexes
+
+Fails in case two regexes are matching the same column.
+
+### Upserting models via unique keys
+
+Creates or updates models taking care of the given unique columns
+
+```php
+public function uniqueColumns(): array
+    {
+        return [
+            'email',
+        ];
+    }
+```
+
+### Relating models
+
+Call hooks for relating found models. The hooks will get called in case **all** defined models have been found
+
+```php
+public function relatingClosures(): Collection
+    {
+        return collect([
+            fn (User $user, Role $role) => $user->roles()->saveMany([$role]),
+            fn (User $user) => event(new UserImported($user)),
+            function (User $user, Role $role, Post $post)  {
+                if ($role->is('user')) {
+                    $user->post()->associate($post)->save();
+                }
+            };
+        ]);
+    }
+```
+
 ## Installation
 
 You can install the package via composer:
 
 ```bash
 composer require swalbrun/filament-model-import
+```
+
+Create a mapper using the make command
+```bash
+php artisan filament:make-filament-import-mapper UserMapper
 ```
 
 You can publish the config file with:
