@@ -1,6 +1,6 @@
 {
     "name": "swalbrun/filament-model-import",
-    "description": "This is my package filament-model-import",
+    "description": "This Filament Plugin will enable you to import files to upsert models by matching columns via regex.",
     "keywords": [
         "sWalbrun",
         "laravel",

@@ -2,6 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/swalbrun/filament-model-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-model-import)
 ![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/swalbrun/filament-model-import/run-tests.yml?branch=main)
+<a href="https://codecov.io/gh/sWalbrun/filament-model-import" >
+<img src="https://codecov.io/gh/sWalbrun/filament-model-import/branch/main/graph/badge.svg?token=9HG0Q05UW2"/>
+</a>
 [![Total Downloads](https://img.shields.io/packagist/dt/swalbrun/filament-model-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-model-import)
 
 This Filament Plugin will enable you to import files to upsert models by matching columns via regex.
