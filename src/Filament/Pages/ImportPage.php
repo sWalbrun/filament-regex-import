@@ -29,6 +29,16 @@ class ImportPage extends Page
 
     protected static string $viewIdentifier = 'import';
 
+    protected static function getNavigationLabel(): string
+    {
+        return trans('filament-model-import::filament-model-import.resource.navigation.label');
+    }
+
+    protected function getTitle(): string
+    {
+        return trans('filament-model-import::filament-model-import.resource.title');
+    }
+
     protected function getFormSchema(): array
     {
         return [

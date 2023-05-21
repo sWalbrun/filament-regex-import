@@ -33,6 +33,7 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
     {
         $package->name(static::$name)
             ->hasConfigFile()
+            ->hasTranslations()
             ->hasCommand(MakeImportMapper::class)
             ->hasViews();
     }

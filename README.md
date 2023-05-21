@@ -98,6 +98,12 @@ return [
 ];
 ```
 
+You can publish the translation file with:
+
+```bash
+php artisan vendor:publish --tag="filament-model-import-translations"
+```
+
 ## Testing
 
 ```bash
