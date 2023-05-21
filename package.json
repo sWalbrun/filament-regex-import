@@ -1,11 +1,11 @@
 {
     "private": true,
     "scripts": {
-        "dev:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/filament-model-import.css --postcss --watch",
-        "dev:scripts": "esbuild resources/js/plugin.js --bundle --sourcemap=inline --outfile=resources/dist/filament-model-import.js --watch",
-        "build:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/filament-model-import.css --postcss --minify && npm run purge",
-        "build:scripts": "esbuild resources/js/plugin.js --bundle --minify --outfile=resources/dist/filament-model-import.js",
-        "purge": "filament-purge -i resources/dist/filament-model-import.css -o resources/dist/filament-model-import.css",
+        "dev:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/filament-regex-import.css --postcss --watch",
+        "dev:scripts": "esbuild resources/js/plugin.js --bundle --sourcemap=inline --outfile=resources/dist/filament-regex-import.js --watch",
+        "build:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/filament-regex-import.css --postcss --minify && npm run purge",
+        "build:scripts": "esbuild resources/js/plugin.js --bundle --minify --outfile=resources/dist/filament-regex-import.js",
+        "purge": "filament-purge -i resources/dist/filament-regex-import.css -o resources/dist/filament-regex-import.css",
         "dev": "npm-run-all --parallel dev:*",
         "build": "npm-run-all build:*"
     },

@@ -15,18 +15,18 @@ use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
 
 class FilamentModelImportServiceProvider extends PluginServiceProvider
 {
-    public static string $name = 'filament-model-import';
+    public static string $name = 'filament-regex-import';
 
     protected array $pages = [
         ImportPage::class,
     ];
 
     protected array $styles = [
-        'plugin-filament-model-import' => __DIR__.'/../resources/dist/filament-model-import.css',
+        'plugin-filament-regex-import' => __DIR__.'/../resources/dist/filament-regex-import.css',
     ];
 
     protected array $scripts = [
-        'plugin-filament-model-import' => __DIR__.'/../resources/dist/filament-model-import.js',
+        'plugin-filament-regex-import' => __DIR__.'/../resources/dist/filament-regex-import.js',
     ];
 
     public function configurePackage(Package $package): void

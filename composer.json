@@ -1,12 +1,12 @@
 {
-    "name": "swalbrun/filament-model-import",
+    "name": "swalbrun/filament-regex-import",
     "description": "This Filament Plugin will enable you to import files to upsert models by matching columns via regex.",
     "keywords": [
         "sWalbrun",
         "laravel",
-        "filament-model-import"
+        "filament-regex-import"
     ],
-    "homepage": "https://github.com/swalbrun/filament-model-import",
+    "homepage": "https://github.com/swalbrun/filament-regex-import",
     "license": "MIT",
     "authors": [
         {

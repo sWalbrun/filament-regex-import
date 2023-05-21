@@ -1,11 +1,11 @@
-# Filament Plugin for importing CSV and XLS files as models
+# Filament Plugin for importing CSV and XLS files via regex
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/swalbrun/filament-model-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-model-import)
-![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/swalbrun/filament-model-import/run-tests.yml?branch=main)
-<a href="https://codecov.io/gh/sWalbrun/filament-model-import" >
-<img src="https://codecov.io/gh/sWalbrun/filament-model-import/branch/main/graph/badge.svg?token=9HG0Q05UW2"/>
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/swalbrun/filament-regex-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-regex-import)
+![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/swalbrun/filament-regex-import/run-tests.yml?branch=main)
+<a href="https://codecov.io/gh/sWalbrun/filament-regex-import" >
+<img src="https://codecov.io/gh/sWalbrun/filament-regex-import/branch/main/graph/badge.svg?token=9HG0Q05UW2"/>
 </a>
-[![Total Downloads](https://img.shields.io/packagist/dt/swalbrun/filament-model-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-model-import)
+[![Total Downloads](https://img.shields.io/packagist/dt/swalbrun/filament-regex-import.svg?style=flat-square)](https://packagist.org/packages/swalbrun/filament-regex-import)
 
 This Filament Plugin will enable you to import files to upsert models by matching columns via regex.
 
@@ -71,7 +71,7 @@ public function relatingClosures(): Collection
 You can install the package via composer:
 
 ```bash
-composer require swalbrun/filament-model-import
+composer require swalbrun/filament-regex-import
 ```
 
 Create a mapper using the make command
@@ -82,7 +82,7 @@ php artisan filament:make-filament-import-mapper UserMapper
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="filament-model-import-config"
+php artisan vendor:publish --tag="filament-regex-import-config"
 ```
 
 This is the contents of the published config file:
@@ -104,7 +104,7 @@ return [
 You can publish the translation file with:
 
 ```bash
-php artisan vendor:publish --tag="filament-model-import-translations"
+php artisan vendor:publish --tag="filament-regex-import-translations"
 ```
 
 ## Testing

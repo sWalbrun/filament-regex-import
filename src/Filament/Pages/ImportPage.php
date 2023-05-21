@@ -25,18 +25,18 @@ class ImportPage extends Page
 
     protected static ?string $navigationIcon = 'bi-filetype-xlsx';
 
-    protected static string $view = 'filament-model-import::pages.import';
+    protected static string $view = 'filament-regex-import::pages.import';
 
     protected static string $viewIdentifier = 'import';
 
     protected static function getNavigationLabel(): string
     {
-        return trans('filament-model-import::filament-model-import.resource.navigation.label');
+        return trans('filament-regex-import::filament-regex-import.resource.navigation.label');
     }
 
     protected function getTitle(): string
     {
-        return trans('filament-model-import::filament-model-import.resource.title');
+        return trans('filament-regex-import::filament-regex-import.resource.title');
     }
 
     protected function getFormSchema(): array
@@ -44,7 +44,7 @@ class ImportPage extends Page
         return [
             FileUpload::make(self::IMPORT)
                 ->label(trans('Import'))
-                ->acceptedFileTypes(config('filament-model-import.accepted_mimes'))
+                ->acceptedFileTypes(config('filament-regex-import.accepted_mimes'))
                 ->imagePreviewHeight('250')
                 ->afterStateUpdated(
                     function () {

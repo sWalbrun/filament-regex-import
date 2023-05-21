@@ -6,7 +6,7 @@ use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
 use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\UserMapper;
 
 beforeEach(function () {
-    config()->set('filament-model-import.mappers', [
+    config()->set('filament-regex-import.mappers', [
         UserMapper::class,
     ]);
 });
@@ -33,7 +33,7 @@ it('successfully registers the configured relator', function () {
 });
 
 it('fails for a wrong configuration', function () {
-    config()->set('filament-model-import.mappers', [
+    config()->set('filament-regex-import.mappers', [
         stdClass::class,
     ]);
 
