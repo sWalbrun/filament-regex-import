@@ -22,9 +22,9 @@ use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
  */
 class ImportService implements OnEachRow
 {
-    private MappingRegistrar $identificationRegister;
+    private MappingRegistrar $mappingRegistrar;
 
-    private RelationRegistrar $associationRegister;
+    private RelationRegistrar $relationRegistrar;
 
     private bool $firstRow = true;
 
@@ -35,10 +35,10 @@ class ImportService implements OnEachRow
      */
     private Collection $headingToColumnMapping;
 
-    public function __construct(MappingRegistrar $identificationRegister, RelationRegistrar $associationRegister)
+    public function __construct(MappingRegistrar $mappingRegistrar, RelationRegistrar $relationRegistrar)
     {
-        $this->identificationRegister = $identificationRegister;
-        $this->associationRegister = $associationRegister;
+        $this->mappingRegistrar = $mappingRegistrar;
+        $this->relationRegistrar = $relationRegistrar;
         $this->nonMatchingHeadingCells = collect();
         $this->headingToColumnMapping = collect();
     }
@@ -60,6 +60,11 @@ class ImportService implements OnEachRow
         $this->handleDataRow($collectedRow);
     }
 
+    public function getHeadingToColumnMapping(): Collection
+    {
+        return $this->headingToColumnMapping;
+    }
+
     /**
      * @throws Exception
      */
@@ -67,10 +72,10 @@ class ImportService implements OnEachRow
     {
         $row->each(function (?string $cell, int $index) {
             if (! isset($cell)) {
-                // Since the cell is not having a heading row, we cannot process it since it gets used as regEx subject
+                // Since the cell is not having a heading row, we cannot process it
                 return;
             }
-            $this->identificationRegister
+            $this->mappingRegistrar
                 ->getMappings()
                 ->each(function (BaseMapper $mapping) use ($index, $cell) {
                     $matchingColumns = $mapping->propertyMapping()
@@ -141,7 +146,7 @@ class ImportService implements OnEachRow
         $allModels = $this->headingToColumnMapping
             ->map(fn (ColumnMapping $columnValue) => $columnValue->mapper->model)
             ->unique();
-        $this->associationRegister->getClosures()
+        $this->relationRegistrar->getClosures()
             ->map(function (Closure $callback) use ($allModels) {
                 $reflectionMethod = new ReflectionFunction($callback);
                 // We have to remember the position within the method declaration to make sure the closure

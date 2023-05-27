@@ -27,7 +27,9 @@ it('can create an user and roles by import', function () {
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
-        ]);
+        ])
+        ->callPageAction('save')
+        ->assertSuccessful();
 
     /** @var User $importedUser */
     $importedUser = User::query()->where(User::COL_NAME, '=', 'Sebastian')->first();
@@ -52,7 +54,9 @@ it('can update an user by import', function () {
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
-        ])->assertSuccessful();
+        ])
+        ->callPageAction('save')
+        ->assertSuccessful();
 
     /** @var User $importedUser */
     $importedUser = User::query()->where(User::COL_NAME, '=', 'Sebastian')->first();
@@ -75,7 +79,9 @@ it('does not call the relation hook if the method argument types do not match', 
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
-        ]);
+        ])
+        ->callPageAction('save')
+        ->assertSuccessful();
     expect(PostMapper::$hasHookBeenCalled)->toBeFalsy();
 });
 
@@ -92,7 +98,9 @@ it('does call the relation hook if the method argument types match', function ()
     livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
-        ]);
+        ])
+        ->callPageAction('save')
+        ->assertSuccessful();
     expect(PostMapper::$hasHookBeenCalled)->toBeTruthy();
 });
 
@@ -105,7 +113,9 @@ it('throws an exception for', function (BaseMapper $modelMapping) {
     expect(fn () => livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => [uniqid() => $fileToImport],
-        ])->send())->toThrow(Exception::class, "The regex's result is overlapping");
+        ])
+        ->callPageAction('save'))
+        ->toThrow(Exception::class, "The regex's result is overlapping");
 })->with([
     'regex matching between two models' => fn () => new class extends BaseMapper
     {

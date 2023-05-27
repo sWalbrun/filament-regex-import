@@ -15,7 +15,7 @@ use Maatwebsite\Excel\ExcelServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
-use SWalbrun\FilamentModelImport\FilamentModelImportServiceProvider;
+use SWalbrun\FilamentModelImport\FilamentRegexImportServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -37,7 +37,7 @@ class TestCase extends Orchestra
             BladeHeroiconsServiceProvider::class,
             FormsServiceProvider::class,
             SupportServiceProvider::class,
-            FilamentModelImportServiceProvider::class,
+            FilamentRegexImportServiceProvider::class,
             BladeCaptureDirectiveServiceProvider::class,
             NotificationsServiceProvider::class,
             TablesServiceProvider::class,

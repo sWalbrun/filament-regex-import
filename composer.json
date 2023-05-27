@@ -73,7 +73,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "SWalbrun\\FilamentModelImport\\FilamentModelImportServiceProvider"
+              "SWalbrun\\FilamentModelImport\\FilamentRegexImportServiceProvider"
             ],
             "aliases": {
                 "FilamentModelImport": "SWalbrun\\FilamentModelImport\\Facades\\FilamentModelImport"

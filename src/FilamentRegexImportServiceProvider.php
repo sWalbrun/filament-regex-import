@@ -13,7 +13,7 @@ use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
 
-class FilamentModelImportServiceProvider extends PluginServiceProvider
+class FilamentRegexImportServiceProvider extends PluginServiceProvider
 {
     public static string $name = 'filament-regex-import';
 
@@ -38,13 +38,6 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
             ->hasViews();
     }
 
-    public function boot()
-    {
-        parent::boot();
-        $this->app->singleton(MappingRegistrar::class);
-        $this->app->singleton(RelationRegistrar::class);
-    }
-
     /**
      * @throws InvalidPackage
      * @throws Exception
@@ -52,12 +45,14 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
     public function register()
     {
         parent::register();
+        $this->app->singleton(MappingRegistrar::class);
+        $this->app->singleton(RelationRegistrar::class);
 
-        /** @var MappingRegistrar $identificationRegistrar */
-        $identificationRegistrar = resolve(MappingRegistrar::class);
+        /** @var MappingRegistrar $mappingRegistrar */
+        $mappingRegistrar = resolve(MappingRegistrar::class);
 
-        /** @var RelationRegistrar $associationRegistrar */
-        $associationRegistrar = resolve(RelationRegistrar::class);
+        /** @var RelationRegistrar $relationRegistrar */
+        $relationRegistrar = resolve(RelationRegistrar::class);
         $configIdentifier = static::$name.'.mappers';
         $mappers = collect(config($configIdentifier));
         $mappers->each(function ($class) use ($configIdentifier) {
@@ -70,13 +65,13 @@ class FilamentModelImportServiceProvider extends PluginServiceProvider
                     .Relator::class
                 );
             }
-        })->each(function (string $mapperClass) use ($associationRegistrar, $identificationRegistrar) {
+        })->each(function (string $mapperClass) use ($relationRegistrar, $mappingRegistrar) {
             $mapper = resolve($mapperClass);
             if ($mapper instanceof BaseMapper) {
-                $identificationRegistrar->register($mapper);
+                $mappingRegistrar->register($mapper);
             }
             if ($mapper instanceof Relator) {
-                $associationRegistrar->registerRelator($mapper);
+                $relationRegistrar->registerRelator($mapper);
             }
         });
 

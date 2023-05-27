@@ -1,6 +1,6 @@
 <?php
 
-use SWalbrun\FilamentModelImport\FilamentModelImportServiceProvider;
+use SWalbrun\FilamentModelImport\FilamentRegexImportServiceProvider;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
 use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\UserMapper;
@@ -12,8 +12,8 @@ beforeEach(function () {
 });
 it('successfully registers the configured mappers', function () {
 
-    /** @var FilamentModelImportServiceProvider $provider */
-    $provider = resolve(FilamentModelImportServiceProvider::class, ['app' => app()]);
+    /** @var FilamentRegexImportServiceProvider $provider */
+    $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
     $provider->register();
 
     /** @var MappingRegistrar $mappingRegistrar */
@@ -22,8 +22,8 @@ it('successfully registers the configured mappers', function () {
 });
 
 it('successfully registers the configured relator', function () {
-    /** @var FilamentModelImportServiceProvider $provider */
-    $provider = resolve(FilamentModelImportServiceProvider::class, ['app' => app()]);
+    /** @var FilamentRegexImportServiceProvider $provider */
+    $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
     $provider->register();
 
     /** @var RelationRegistrar $relationRegistrar */
@@ -37,7 +37,7 @@ it('fails for a wrong configuration', function () {
         stdClass::class,
     ]);
 
-    /** @var FilamentModelImportServiceProvider $provider */
-    $provider = resolve(FilamentModelImportServiceProvider::class, ['app' => app()]);
+    /** @var FilamentRegexImportServiceProvider $provider */
+    $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
     expect(fn () => $provider->register())->toThrow(Exception::class);
 });
