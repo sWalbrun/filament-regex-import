@@ -36,6 +36,11 @@ class ImportPage extends Page
 
     protected static string $viewIdentifier = 'import';
 
+    protected static function getNavigationGroup(): ?string
+    {
+        return config('filament-regex-import.navigation_group');
+    }
+
     public function __construct($id = null)
     {
         parent::__construct($id);

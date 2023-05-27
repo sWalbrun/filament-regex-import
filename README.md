@@ -9,6 +9,49 @@
 
 This Filament Plugin will enable you to import files to upsert models by matching columns via regex.
 
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require swalbrun/filament-regex-import
+```
+
+Create a mapper using the make command
+
+```bash
+php artisan filament:make-filament-import-mapper UserMapper
+```
+
+You can publish the config file with:
+
+```bash
+php artisan vendor:publish --tag="filament-regex-import-config"
+```
+
+This is the contents of the published config file:
+
+```php
+return [
+    'accepted_mimes' => [
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'text/csv',
+        'text/plain',
+        'csv',
+    ],
+    'mappers' => [
+    ],
+    'navigation_group' => 'Import',
+];
+```
+
+You can publish the translation file with:
+
+```bash
+php artisan vendor:publish --tag="filament-regex-import-translations"
+```
+
 ## Features
 
 ### Matching header columns with configured regex
@@ -49,7 +92,7 @@ public function uniqueColumns(): array
 
 ### Relating models
 
-Call hooks for relating found models. The hooks will get called in case **all** defined models have been found
+Call hooks for relating found models. The hooks will get called in case **all** hooks arguments models have been found
 
 ```php
 public function relatingClosures(): Collection
@@ -57,6 +100,7 @@ public function relatingClosures(): Collection
         return collect([
             fn (User $user, Role $role) => $user->roles()->saveMany([$role]),
             fn (User $user) => event(new UserImported($user)),
+            // Only gets called if a user, role and post with the matching type has been found by import
             function (User $user, Role $role, Post $post)  {
                 if ($role->is('user')) {
                     $user->post()->associate($post)->save();
@@ -64,47 +108,6 @@ public function relatingClosures(): Collection
             };
         ]);
     }
-```
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require swalbrun/filament-regex-import
-```
-
-Create a mapper using the make command
-```bash
-php artisan filament:make-filament-import-mapper UserMapper
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="filament-regex-import-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-    'accepted_mimes' => [
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'text/csv',
-        'text/plain',
-        'csv',
-    ],
-    'mappers' => [
-    ]
-];
-```
-
-You can publish the translation file with:
-
-```bash
-php artisan vendor:publish --tag="filament-regex-import-translations"
 ```
 
 ## Testing

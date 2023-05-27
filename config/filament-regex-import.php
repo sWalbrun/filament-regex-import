@@ -10,4 +10,5 @@ return [
     ],
     'mappers' => [
     ],
+    'navigation_group' => 'Import',
 ];
