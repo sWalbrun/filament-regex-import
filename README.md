@@ -9,6 +9,10 @@
 
 This Filament Plugin will enable you to import files to upsert models by matching columns via regex.
 
+![Page](https://github.com/sWalbrun/filament-regex-import/assets/38902857/0c62bc8a-6608-4208-bb8c-3fc0cc48c003)
+
+![Modal](https://github.com/sWalbrun/filament-regex-import/assets/38902857/3398d51f-41ef-4a2d-b42a-a132d07dee87)
+
 ## Installation
 
 You can install the package via composer:
