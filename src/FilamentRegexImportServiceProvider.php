@@ -42,9 +42,9 @@ class FilamentRegexImportServiceProvider extends PluginServiceProvider
      * @throws InvalidPackage
      * @throws Exception
      */
-    public function register()
+    public function boot()
     {
-        parent::register();
+        parent::boot();
         $this->app->singleton(MappingRegistrar::class);
         $this->app->singleton(RelationRegistrar::class);
 

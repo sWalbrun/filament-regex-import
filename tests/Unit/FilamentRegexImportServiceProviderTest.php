@@ -15,6 +15,7 @@ it('successfully registers the configured mappers', function () {
     /** @var FilamentRegexImportServiceProvider $provider */
     $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
     $provider->register();
+    $provider->boot();
 
     /** @var MappingRegistrar $mappingRegistrar */
     $mappingRegistrar = resolve(MappingRegistrar::class);
@@ -25,6 +26,7 @@ it('successfully registers the configured relator', function () {
     /** @var FilamentRegexImportServiceProvider $provider */
     $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
     $provider->register();
+    $provider->boot();
 
     /** @var RelationRegistrar $relationRegistrar */
     $relationRegistrar = resolve(RelationRegistrar::class);
@@ -39,5 +41,8 @@ it('fails for a wrong configuration', function () {
 
     /** @var FilamentRegexImportServiceProvider $provider */
     $provider = resolve(FilamentRegexImportServiceProvider::class, ['app' => app()]);
-    expect(fn () => $provider->register())->toThrow(Exception::class);
+    expect(function () use ($provider) {
+        $provider->register();
+        $provider->boot();
+    })->toThrow(Exception::class);
 });
