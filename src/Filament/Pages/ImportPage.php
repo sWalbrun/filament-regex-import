@@ -7,7 +7,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Pages\Page;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,8 +15,8 @@ use SWalbrun\FilamentModelImport\Import\Services\ImportService;
 
 class ImportPage extends Page
 {
-    use WithFileUploads;
     use InteractsWithForms;
+    use WithFileUploads;
 
     /**
      * Needed for the file upload input to work properly.

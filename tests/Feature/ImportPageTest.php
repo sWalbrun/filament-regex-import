@@ -16,13 +16,14 @@ use SWalbrun\FilamentModelImport\Tests\__Data__\ModelMappings\UserMapper;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\Blog;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\Post;
 use SWalbrun\FilamentModelImport\Tests\__Data__\Models\User;
+
 use function Pest\Livewire\livewire;
 
 it('can create an user and roles by import', function () {
     $fileToImport = getUserImportCsv();
-    $userMapper = new UserMapper();
+    $userMapper = new UserMapper;
     registerMapper($userMapper);
-    registerMapper(new RoleMapper());
+    registerMapper(new RoleMapper);
     registerRelator($userMapper);
 
     livewire(ImportPage::class)
@@ -46,9 +47,9 @@ it('can update an user by import', function () {
         'email' => 'ws-1993@gmx.de',
     ]);
 
-    $userMapper = new UserMapper();
+    $userMapper = new UserMapper;
     registerMapper($userMapper);
-    registerMapper(new RoleMapper());
+    registerMapper(new RoleMapper);
     registerRelator($userMapper);
 
     $fileToImport = getUserImportCsv();
@@ -74,7 +75,7 @@ it('does not call the relation hook if the method argument types do not match', 
 
     registerMapper(new BlogMapper($blog));
     registerMapper(new PostMapper($post));
-    registerRelator(fn(stdClass $post, BlogMapper $blog) => PostMapper::$hasHookBeenCalled = true);
+    registerRelator(fn (stdClass $post, BlogMapper $blog) => PostMapper::$hasHookBeenCalled = true);
 
     $fileToImport = getPropertyImportCsv();
     livewire(ImportPage::class)
@@ -93,7 +94,7 @@ it('does call the relation hook if the method argument types match', function ()
 
     registerMapper(new BlogMapper($blog));
     registerMapper(new PostMapper($post));
-    registerRelator(fn(Post $post, Blog $blog) => PostMapper::$hasHookBeenCalled = true);
+    registerRelator(fn (Post $post, Blog $blog) => PostMapper::$hasHookBeenCalled = true);
 
     $fileToImport = getPropertyImportCsv();
     livewire(ImportPage::class)
@@ -106,22 +107,23 @@ it('does call the relation hook if the method argument types match', function ()
 });
 
 it('throws an exception for', function (BaseMapper $modelMapping) {
-    registerMapper(new UserMapper());
-    registerMapper(new RoleMapper());
+    registerMapper(new UserMapper);
+    registerMapper(new RoleMapper);
     registerMapper($modelMapping);
 
     $fileToImport = getUserImportCsv();
-    expect(fn() => livewire(ImportPage::class)
+    expect(fn () => livewire(ImportPage::class)
         ->fillForm([
             ImportPage::IMPORT => $fileToImport,
         ])
         ->callAction('save'))
         ->toThrow(Exception::class, "The regex's result is overlapping");
 })->with([
-    'regex matching between two models' => fn() => new class extends BaseMapper {
+    'regex matching between two models' => fn () => new class extends BaseMapper
+    {
         public function __construct()
         {
-            parent::__construct(new User());
+            parent::__construct(new User);
         }
 
         public function propertyMapping(): Collection
@@ -136,10 +138,11 @@ it('throws an exception for', function (BaseMapper $modelMapping) {
             return [];
         }
     },
-    'regex matching within same model' => fn() => new class extends BaseMapper {
+    'regex matching within same model' => fn () => new class extends BaseMapper
+    {
         public function __construct()
         {
-            parent::__construct(new User());
+            parent::__construct(new User);
         }
 
         public function propertyMapping(): Collection
@@ -160,23 +163,23 @@ it('throws an exception for', function (BaseMapper $modelMapping) {
 
 function getUserImportCsv(): UploadedFile
 {
-    $content = <<<CSV
+    $content = <<<'CSV'
 "Benutzername","E-Mail","Beitrittsdatum","Beitragsgruppe","Anzahl d. Anteile","Angelegt am","Rolle","Slug Rolle","Product Number"
 "Sebastian","ws-1993@gmx.de","44211","FULL_MEMBER","1","44197","admin","admin","Unit"
 "Sebastian","ws-1993@gmx.de","44211","FULL_MEMBER","1","44197","bidderRoundParticipant","bidderRoundParticipant","Test"
 CSV;
 
-    return UploadedFile::fake()->createWithContent("UserImport.csv", $content);
+    return UploadedFile::fake()->createWithContent('UserImport.csv', $content);
 }
 
 function getPropertyImportCsv(): UploadedFile
 {
-    $content = <<<CSV
+    $content = <<<'CSV'
 "PostName","BlogName"
 "PropsGehenRaus","KenBlock"
 CSV;
 
-    return UploadedFile::fake()->createWithContent("PropertyImport.csv", $content);
+    return UploadedFile::fake()->createWithContent('PropertyImport.csv', $content);
 }
 
 function mockPost(): Post

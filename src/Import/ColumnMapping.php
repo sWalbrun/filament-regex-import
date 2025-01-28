@@ -14,6 +14,5 @@ class ColumnMapping
         public BaseMapper $mapper,
         public string $column,
         public string $originalRegEx
-    ) {
-    }
+    ) {}
 }

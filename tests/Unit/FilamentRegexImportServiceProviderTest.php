@@ -31,7 +31,7 @@ it('successfully registers the configured relator', function () {
     /** @var RelationRegistrar $relationRegistrar */
     $relationRegistrar = resolve(RelationRegistrar::class);
 
-    expect($relationRegistrar->getClosures())->toEqual((new UserMapper())->relatingClosures());
+    expect($relationRegistrar->getClosures())->toEqual((new UserMapper)->relatingClosures());
 });
 
 it('fails for a wrong configuration', function () {

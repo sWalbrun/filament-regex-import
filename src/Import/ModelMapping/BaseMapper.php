@@ -14,7 +14,7 @@ abstract class BaseMapper
     public Model $model;
 
     /**
-     * @param  Model  $model This mapping is referring to this model.
+     * @param  Model  $model  This mapping is referring to this model.
      */
     public function __construct(Model $model)
     {
@@ -38,14 +38,10 @@ abstract class BaseMapper
     /**
      * You can overwrite this hook in case you want to make some manipulations before the model gets saved.
      */
-    public function saving(Model $model): void
-    {
-    }
+    public function saving(Model $model): void {}
 
     /**
      * You can overwrite this hook in case you want to make some manipulations before the model gets saved.
      */
-    public function saved(Model $model): void
-    {
-    }
+    public function saved(Model $model): void {}
 }

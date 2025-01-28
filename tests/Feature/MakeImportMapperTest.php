@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Console\Command;
-use Illuminate\Console\View\Components\Confirm;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
