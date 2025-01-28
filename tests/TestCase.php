@@ -2,19 +2,20 @@
 
 namespace SWalbrun\FilamentModelImport\Tests;
 
-use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
-use BladeUI\Icons\BladeIconsServiceProvider;
+use Filament\Actions\ActionsServiceProvider;
+use Filament\Facades\Filament;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
-use Filament\Notifications\NotificationsServiceProvider;
+use Filament\Panel;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
+use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Maatwebsite\Excel\ExcelServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
+use SWalbrun\FilamentModelImport\FilamentRegexImportPlugin;
 use SWalbrun\FilamentModelImport\FilamentRegexImportServiceProvider;
 
 class TestCase extends Orchestra
@@ -23,27 +24,40 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        $this->withoutExceptionHandling();
+
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'SWalbrun\\FilamentModelImport\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
+        $this->registerTestPanel();
+
         return [
             LivewireServiceProvider::class,
             FilamentServiceProvider::class,
-            BladeIconsServiceProvider::class,
-            BladeHeroiconsServiceProvider::class,
+            FilamentRegexImportServiceProvider::class,
+            PermissionServiceProvider::class,
+            ActionsServiceProvider::class,
+            WidgetsServiceProvider::class,
             FormsServiceProvider::class,
             SupportServiceProvider::class,
-            FilamentRegexImportServiceProvider::class,
-            BladeCaptureDirectiveServiceProvider::class,
-            NotificationsServiceProvider::class,
             TablesServiceProvider::class,
             ExcelServiceProvider::class,
-            PermissionServiceProvider::class,
         ];
+    }
+
+    protected function registerTestPanel(): void
+    {
+        Filament::registerPanel(
+            fn (): Panel => Panel::make()
+                ->default()
+                ->id('test')
+                ->path('test')
+                ->plugin(FilamentRegexImportPlugin::make()),
+        );
     }
 
     protected function defineDatabaseMigrations()

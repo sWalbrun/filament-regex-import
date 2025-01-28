@@ -2,10 +2,10 @@
 
 namespace SWalbrun\FilamentModelImport\Filament\Pages;
 
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Pages\Actions\Action;
 use Filament\Pages\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -21,10 +21,8 @@ class ImportPage extends Page
 
     /**
      * Needed for the file upload input to work properly.
-     *
-     * @var mixed
      */
-    public $import = null;
+    public mixed $import = null;
 
     private ImportService $importService;
 
@@ -36,23 +34,22 @@ class ImportPage extends Page
 
     protected static string $viewIdentifier = 'import';
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return config('filament-regex-import.navigation_group');
     }
 
-    public function __construct($id = null)
+    public function __construct()
     {
-        parent::__construct($id);
         $this->importService = resolve(ImportService::class);
     }
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return trans('filament-regex-import::filament-regex-import.resource.navigation.label');
     }
 
-    protected function getTitle(): string
+    public function getTitle(): string
     {
         return trans('filament-regex-import::filament-regex-import.resource.title');
     }
@@ -90,7 +87,7 @@ class ImportPage extends Page
         ];
     }
 
-    private function getColumnMapping(): Collection
+    private function getColumnMapping(): array
     {
         try {
             DB::beginTransaction();
@@ -101,7 +98,7 @@ class ImportPage extends Page
                     $mapping->originalRegEx => trans(class_basename($mapping->mapper->model::class))
                         .': '
                         .trans($mapping->column),
-                ]);
+                ])->toArray();
         } finally {
             DB::rollBack();
         }
@@ -111,7 +108,7 @@ class ImportPage extends Page
     {
         Excel::import(
             $this->importService,
-            reset($this->import)->getRealPath()
+            $this->import->getRealPath()
         );
     }
 }

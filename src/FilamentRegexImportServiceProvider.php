@@ -3,23 +3,18 @@
 namespace SWalbrun\FilamentModelImport;
 
 use Exception;
-use Filament\PluginServiceProvider;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 use SWalbrun\FilamentModelImport\Commands\MakeImportMapper;
-use SWalbrun\FilamentModelImport\Filament\Pages\ImportPage;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\BaseMapper;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\MappingRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\RelationRegistrar;
 use SWalbrun\FilamentModelImport\Import\ModelMapping\Relator;
 
-class FilamentRegexImportServiceProvider extends PluginServiceProvider
+class FilamentRegexImportServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-regex-import';
-
-    protected array $pages = [
-        ImportPage::class,
-    ];
 
     protected array $styles = [
         'plugin-filament-regex-import' => __DIR__.'/../resources/dist/filament-regex-import.css',
@@ -59,7 +54,7 @@ class FilamentRegexImportServiceProvider extends PluginServiceProvider
             if (! (is_subclass_of($class, BaseMapper::class) || is_subclass_of($class, Relator::class))) {
                 throw new Exception(
                     'The configured mapper class '.
-                    "$class in $configIdentifier does not implement "
+                    "$class in $configIdentifier does neither implement "
                     .BaseMapper::class
                     .' nor '
                     .Relator::class

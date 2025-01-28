@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Console\Command;
+use Illuminate\Console\View\Components\Confirm;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
@@ -58,5 +59,7 @@ it('fails because mapper exists already', function () use ($path, $fileSystem) {
             ->beforeLast(DIRECTORY_SEPARATOR),
     );
     $fileSystem->put(base_path($path), '');
-    $this->artisan('filament:make-filament-import-mapper UserMapper')->assertExitCode(Command::INVALID);
+    $this->artisan('filament:make-filament-import-mapper UserMapper')
+        ->expectsConfirmation('UserMapper.php already exists, do you want to overwrite it?', 'no')
+        ->assertExitCode(Command::INVALID);
 });
