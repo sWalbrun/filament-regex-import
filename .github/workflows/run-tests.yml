@@ -30,7 +30,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:10.*" "orchestra/testbench:9.*" --no-interaction --no-update
           composer update --prefer-lowest --prefer-stable --no-interaction --prefer-dist
 
       - name: Grant write permission to root
