@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --prefer-lowest --prefer-stable --no-interaction --prefer-dist
+          composer update --prefer-stable --no-interaction --prefer-dist
 
       - name: Grant write permission to root
         run: chmod +w ./
