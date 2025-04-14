@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    name: P8.2 - L9.* - prefer-lowest & prefer-stable - ubuntu-latest
+    name: P8.2 - L9.* - prefer-stable - ubuntu-latest
 
     steps:
       - name: Checkout code
